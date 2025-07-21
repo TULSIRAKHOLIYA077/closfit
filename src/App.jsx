@@ -8,6 +8,7 @@ import UseEffect from "./component/day5/UseEffect"
 import BlogPosts from "./component/day6/BlogPosts "
 import DashBoard from "./component/day7/DashBoard"
 import Hoc from "./component/day8/Hoc"
+import TodoApp from "./component/day9/TodoApp"
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
       {/* <TimerEffect/> */}
       {/* <BlogPosts/> */}
       {/* <DashBoard/> */}
-      <Hoc/>
+      {/* <Hoc/> */}
+      <TodoApp/>
     </>
   )
 }
