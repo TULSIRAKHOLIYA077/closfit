@@ -1,25 +1,48 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
+import { useProductData } from "../context/ProductDataContext";
+import { useCart } from "../context/useCart";
 
 const ProductDetailPage = () => {
   const {id} = useParams();
+  const { customProducts } = useProductData();
   const [product, setProduct] = useState("");
-
-  const fetchDetail = async () =>{
-    const productDetail = await fetch(`https://fakestoreapi.com/products/${id}`);
-    const json = await productDetail.json();
-    setProduct(json);
-  }
-  console.log(product);
-
-  useEffect(()=>{
-    fetchDetail();
-  },[])
+  const { addToCart } = useCart();
   
-   if (!product) return <p className="pt-40">Loading...</p>;
+  useEffect(()=>{
+    const localProduct = customProducts.find(p => p.id == id); 
+
+    if (localProduct) {
+      setProduct(localProduct);
+    } else {
+      fetch(`https://fakestoreapi.com/products/${id}`)
+        .then(res => res.json())
+        .then(data => setProduct(data))
+        .catch(err => console.log("Error fetching from API", err));
+    }
+  },[id, customProducts])
+  
+  if (!product) {
+    return (
+      <div className="flex justify-center items-center pt-40">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  const handleAddToCart = () => {
+    const item = {
+      id: product.id,
+      image: product.image,
+      name: product.title,
+      price: product.price,
+      dec: product.description,
+    };
+    addToCart(item);
+  };
 
   return (
-    <div className="pt-32 min-h-screen max-h-fit">
+    <div className="min-h-screen max-h-fit pt-30">
       <div className="bg-gray-200 w-[600px] rounded-xl flex flex-col p-3 items-center m-auto">
         <div className="flex items-center gap-5">
           <img src={product.image} className="w-[40%] rounded-xl" alt="product-image" />
@@ -36,7 +59,7 @@ const ProductDetailPage = () => {
         </div>
             <p className="mb-1 mt-3">{product.description}</p> 
             <div className="flex gap-2">
-              <button className="border bg-gray-800 text-white p-2 rounded-lg cursor-pointer">Add to cart</button>
+              <button className="border bg-gray-800 text-white p-2 rounded-lg cursor-pointer" onClick={handleAddToCart}>Add to cart</button>
             </div>
       </div>
     </div>
@@ -44,3 +67,5 @@ const ProductDetailPage = () => {
 }
 
 export default ProductDetailPage
+
+

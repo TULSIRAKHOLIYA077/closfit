@@ -5,6 +5,7 @@ import HomePage from "./HomePage"
 import ProductDetailPage from "./ProductDetailPage"
 import CartPage from "./CartPage" 
 import AddProductPage from "./AddProductPage"
+import AdminProduct from "./AdminProduct"
 
 const EcommerceApp = () => {
   return (
@@ -15,6 +16,7 @@ const EcommerceApp = () => {
           <Route path=":id" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="/admin/add" element={<AddProductPage/>} />
+          <Route path="/admin/product" element={<AdminProduct/>} />
         </Route>      
       </Routes>
     </div>
