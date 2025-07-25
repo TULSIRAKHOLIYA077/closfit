@@ -1,4 +1,3 @@
-// // src/component/AdminProduct.jsx
 import { useProductData } from "../context/ProductDataContext";
 import ProductList from "./ProductList";
 
@@ -12,4 +11,3 @@ const AdminProduct = () => {
 };
 
 export default AdminProduct;
-

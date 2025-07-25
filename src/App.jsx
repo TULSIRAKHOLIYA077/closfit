@@ -1,4 +1,3 @@
-
 import EcommerceApp from "./component/EcommerceApp";
 import { CartProvider } from "./context/CartContext";
 import ProductDataProvider from "./context/ProductDataContext";

@@ -32,5 +32,3 @@ const ProductDataProvider = ({children}) => {
 }
 
 export default ProductDataProvider
-
-

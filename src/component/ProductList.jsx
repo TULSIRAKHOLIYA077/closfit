@@ -14,4 +14,3 @@ const ProductList = ({productList}) => {
 }
 
 export default ProductList
-
