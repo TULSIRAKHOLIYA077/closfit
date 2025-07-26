@@ -1,34 +1,43 @@
-import { createContext, useContext, useEffect, useState } from "react"
+// src/context/ProductDataContext.jsx
+import { createContext, useContext, useEffect, useState } from "react";
 
 const ProductDataContext = createContext();
+export const useProductData = () => useContext(ProductDataContext);
 
-export const useProductData = () =>useContext(ProductDataContext);
-
-const ProductDataProvider = ({children}) => {
-    const [apiProducts, setApiProducts] = useState([]);
-    const [customProducts, setCustomProducts] = useState([]);
-    const [fullList, setFullList] = useState([]);
-
-    useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((data) => setApiProducts(data));
-  }, []);
+const ProductDataProvider = ({ children }) => {
+  const [fullList, setFullList] = useState([]);
 
   useEffect(() => {
-    setFullList([...apiProducts, ...customProducts]);
-  }, [apiProducts, customProducts]);
-
+    fetch("https://fakestoreapi.com/products")
+      .then((res) => res.json())
+      .then((data) => setFullList(data))
+      .catch((err) => console.log("API error:", err));
+  }, []);
 
   const addProduct = (product) => {
-      setCustomProducts((prev) => [...prev, { ...product, id: Date.now() }]);
-    };
+    const newProduct = { ...product, id: Date.now() };
+    setFullList((prev) => [...prev, newProduct]);
+  };
+
+  const deleteProduct = (id) => {
+    setFullList((prev) => prev.filter((product) => product.id !== id));
+  };
+
+  const editProduct = (updatedProduct) => {
+    setFullList((prev) =>
+      prev.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      )
+    );
+  };
 
   return (
-    <ProductDataContext.Provider value={{addProduct, fullList, customProducts}}>
+    <ProductDataContext.Provider
+      value={{ fullList, addProduct, deleteProduct, editProduct }}
+    >
       {children}
     </ProductDataContext.Provider>
-  )
-}
+  );
+};
 
-export default ProductDataProvider
+export default ProductDataProvider;
