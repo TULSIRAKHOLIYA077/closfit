@@ -1,47 +1,31 @@
-import { Link, useLocation } from "react-router-dom";
-import { useCart } from "../context/useCart";
-import { useProductData } from "../context/ProductDataContext";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
 
-const Product = ({ image, name, price, dec, id }) => {
-  const { addToCart } = useCart();
-  const { deleteProduct } = useProductData();
-  const location = useLocation();
-  const isAdmin = location.pathname.includes("/admin/product");
+const Product = ({ thumbnail, name, price, dec, id }) => {
+  const dispatch = useDispatch();
 
   return (
-    <div className="bg-gray-200 w-[300px] rounded-xl flex flex-col p-3 items-center">
-      <img src={image} className="w-[90%] h-52 rounded-xl" alt="product" />
-      <div className="mt-3 w-full">
-        <h2 className="font-bold text-xl truncate">{name}</h2>
-        <p><span className="font-bold">Price:</span> $ {price}</p>
-        <p className="truncate mb-1">{dec}</p>
-        <div className="flex gap-2">
-          {!isAdmin && (
-            <>
-              <Link to={`/${id}`}>
-                <button className="bg-gray-800 text-white p-2 rounded-lg">View Detail</button>
-              </Link>
-              <button className="bg-gray-800 text-white p-2 rounded-lg" onClick={() => addToCart({ image, name, price, dec, id })}>
-                Add to cart
-              </button>
-            </>
-          )}
-          {isAdmin && (
-            <>
-              <Link to={`/admin/edit/${id}`}>
-                <button className="bg-yellow-600 text-white p-2 rounded-lg">Edit</button>
-              </Link>
-              <button
-                className="bg-red-600 text-white p-2 rounded-lg"
-                onClick={() => {
-                  const confirmDelete = confirm("Are you sure you want to delete?");
-                  if (confirmDelete) deleteProduct(id);
-                }}
-              >
-                Delete
-              </button>
-            </>
-          )}
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 w-full max-w-xs p-5 flex flex-col items-center text-gray-800">
+      <img src={thumbnail} alt={name} className="w-full h-38 object-contain rounded-xl mb-4" />
+
+      <div className="w-full flex flex-col gap-2">
+        <h2 className="font-bold text-lg truncate">{name}</h2>
+        <p className="text-gray-600 text-sm line-clamp-2">{dec}</p>
+        <p className="font-semibold text-gray-700 mt-1">💵 ${price}</p>
+
+        <div className="flex gap-3 mt-4">
+          <Link to={`/${id}`} className="flex-1">
+            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition">
+              View Details
+            </button>
+          </Link>
+          <button
+            onClick={() => dispatch(addToCart({ thumbnail, title: name, price, description: dec, id }))}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition"
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

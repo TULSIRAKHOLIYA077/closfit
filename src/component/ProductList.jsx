@@ -1,4 +1,3 @@
-// src/component/ProductList.jsx
 import Product from "./Product";
 
 const ProductList = ({ productList }) => {
@@ -8,7 +7,7 @@ const ProductList = ({ productList }) => {
         <Product
           key={list.id}
           id={list.id}
-          image={list.image}
+          thumbnail={list.thumbnail}
           name={list.title}
           price={list.price}
           dec={list.description}

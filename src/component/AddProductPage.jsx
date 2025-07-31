@@ -1,93 +1,117 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
-import { useProductData } from "../context/ProductDataContext";
+
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct, updateProduct } from "../redux/productSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddProductPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { addProduct } = useProductData();
+  const { id } = useParams(); 
+  const isEditMode = Boolean(id);
+
+  const { productItems } = useSelector((state) => state.product);
 
   const [form, setForm] = useState({
     title: "",
     price: "",
+    image: "",
     description: "",
-    image: ""
   });
 
   const [error, setError] = useState("");
 
-  const handleEvent = (e) => {
-    setError("");
-    setForm({ ...form, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (isEditMode && productItems.length) {
+      const existingProduct = productItems.find(
+        (product) => product.id.toString() === id.toString()
+      );
+      if (existingProduct) {
+        setForm({
+          title: existingProduct.title || "",
+          price: existingProduct.price || "",
+          image: existingProduct.image || "",
+          description: existingProduct.description || "",
+        });
+      }
+    }
+  }, [id, isEditMode, productItems]);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = (e)=>{
-     e.preventDefault();
-    if(!form.title || !form.price || !form.description || !form.image){
-      setError("Please fill all fields");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!form.title || !form.price || !form.image || !form.description) {
+      setError("Please fill in all fields.");
       return;
     }
 
-    if(!form.image.includes("https://")){
-      setError("Use image URL");
-      return;
+    if (isEditMode) {
+      dispatch(updateProduct({ id, updatedProduct: form }));
+    } else {
+      dispatch(addProduct(form));
     }
 
-    if (isNaN(form.price)) {
-      setError("Price must be a number");
-      return;
-    }
+    navigate("/admin/product");
+  };
 
-    addProduct(form);
-    alert("Product added!");
-    navigate("/");
-  }
   return (
-    <div className=" pt-30 h-screen">
-      <form onSubmit={handleSubmit} className=" bg-gray-50 w-[500px] py-4 px-10 m-auto flex flex-col rounded">
-        <h2 className="text-2xl font-bold text-center mb-3">Add New Product</h2>
-        <div className="flex flex-col gap-3">
+    <div className="min-h-screen bg-gray-200 pt-40 px-4">
+      <div className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6">
+          {isEditMode ? "Edit Product" : "Add Product"}
+        </h2>
+
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
-            type="text" 
+            type="text"
             name="title"
-            onChange={handleEvent} 
-            placeholder="Product Title"
             value={form.title}
-            className="border p-2 rounded"
+            onChange={handleChange}
+            placeholder="Product Title"
+            className="w-full p-2 border rounded"
           />
-
           <input
-            type="text" 
+            type="text"
             name="price"
-            onChange={handleEvent} 
-            placeholder="Price"
             value={form.price}
-            className="border p-2 rounded"
+            onChange={handleChange}
+            placeholder="Price"
+            className="w-full p-2 border rounded"
           />
-
           <input
             type="text"
             name="image"
-            placeholder="Image URL"
             value={form.image}
-            onChange={handleEvent}
-            className="border p-2 rounded"
+            onChange={handleChange}
+            placeholder="Image URL"
+            className="w-full p-2 border rounded"
           />
-
           <textarea
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleEvent}
-          className="border p-2 rounded"
-          ></textarea>
-
-          <button type="submit" className="bg-green-600 text-white py-2 rounded hover:bg-green-700 font-bold text-lg cursor-pointer">Submit</button>
-        </div>
-
-        {error && <p className="text-red-700 text-center mt-2">{error}</p>}
-      </form>
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            placeholder="Description"
+            className="w-full p-2 border rounded"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg"
+          >
+            {isEditMode ? "Update" : "Add"} Product
+          </button>
+        </form>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddProductPage
+export default AddProductPage;
