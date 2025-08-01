@@ -27,14 +27,13 @@ const productSlice = createSlice({
     setProduct: (state, action) => {
       const apiProducts = action.payload;
 
-      // Filter existing custom products
       const customProducts = state.productItems.filter(item =>
-        item.id.toString().startsWith("custom-")
+        item.id?.toString().startsWith("custom-")
       );
 
       state.productItems = [...apiProducts, ...customProducts];
       state.isApiLoaded = true;
-      saveToLocalStorage(state.productItems); // Optional
+      saveToLocalStorage(state.productItems);
     },
     addProduct: (state, action) => {
       const newProduct = {
