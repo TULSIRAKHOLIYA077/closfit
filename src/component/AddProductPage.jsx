@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, updateProduct } from "../redux/productSlice";
@@ -15,7 +14,7 @@ const AddProductPage = () => {
   const [form, setForm] = useState({
     title: "",
     price: "",
-    image: "",
+    thumbnail: "",
     description: "",
   });
 
@@ -30,7 +29,7 @@ const AddProductPage = () => {
         setForm({
           title: existingProduct.title || "",
           price: existingProduct.price || "",
-          image: existingProduct.image || "",
+          thumbnail: existingProduct.thumbnail || existingProduct.image || "",
           description: existingProduct.description || "",
         });
       }
@@ -47,7 +46,7 @@ const AddProductPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!form.title || !form.price || !form.image || !form.description) {
+    if (!form.title || !form.price || !form.thumbnail || !form.description) {
       setError("Please fill in all fields.");
       return;
     }
@@ -87,14 +86,16 @@ const AddProductPage = () => {
             placeholder="Price"
             className="w-full p-2 border rounded"
           />
+
           <input
             type="text"
-            name="image"
-            value={form.image}
+            name="thumbnail"
+            value={form.thumbnail}
             onChange={handleChange}
             placeholder="Image URL"
             className="w-full p-2 border rounded"
           />
+
           <textarea
             name="description"
             value={form.description}

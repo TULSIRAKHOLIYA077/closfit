@@ -19,7 +19,7 @@ const HomePage = () => {
         const response = await fetch("https://dummyjson.com/products");
         if (!response.ok) throw new Error("Failed to fetch products from API.");
         const data = await response.json();
-        dispatch(setProduct(data.products)); // Important: access `.products` key
+        dispatch(setProduct(data.products)); 
         setApiError(null);
       } catch (error) {
         console.error("API Error:", error);
