@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Load products from localStorage
+// Load from localStorage
 const loadFromLocalStorage = () => {
   try {
     const data = localStorage.getItem("productItems");
@@ -10,7 +10,7 @@ const loadFromLocalStorage = () => {
   }
 };
 
-// Save products to localStorage
+// Save to localStorage
 const saveToLocalStorage = (items) => {
   localStorage.setItem("productItems", JSON.stringify(items));
 };
@@ -25,13 +25,16 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     setProduct: (state, action) => {
-      if (!state.isApiLoaded) {
-        const nonCustomProducts = state.productItems.filter(item => !item.id.toString().startsWith("custom-"));
-        const customProducts = state.productItems.filter(item => item.id.toString().startsWith("custom-"));
-        state.productItems = [...action.payload, ...customProducts];
-        state.isApiLoaded = true;
-        saveToLocalStorage(state.productItems);
-      }
+      const apiProducts = action.payload;
+
+      // Filter existing custom products
+      const customProducts = state.productItems.filter(item =>
+        item.id.toString().startsWith("custom-")
+      );
+
+      state.productItems = [...apiProducts, ...customProducts];
+      state.isApiLoaded = true;
+      saveToLocalStorage(state.productItems); // Optional
     },
     addProduct: (state, action) => {
       const newProduct = {
@@ -43,7 +46,9 @@ const productSlice = createSlice({
     },
     updateProduct: (state, action) => {
       const { id, updatedProduct } = action.payload;
-      const index = state.productItems.findIndex((item) => item.id.toString() === id.toString());
+      const index = state.productItems.findIndex(
+        (item) => item.id.toString() === id.toString()
+      );
       if (index !== -1) {
         state.productItems[index] = {
           ...state.productItems[index],
@@ -61,5 +66,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { setProduct, addProduct, updateProduct, deleteProduct } = productSlice.actions;
+export const { setProduct, addProduct, updateProduct, deleteProduct } =
+  productSlice.actions;
 export default productSlice.reducer;
