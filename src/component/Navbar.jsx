@@ -1,14 +1,22 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setTheme } from "../redux/themeSlice";
+import { logout } from "../redux/authSlice";
 
 const Navbar = () => {
   const cartItems = useSelector(state => state.cart.cartItems);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const useTheme = useSelector((store)=> store.theme.theme);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn); 
   const toggleTheme = () => {
     dispatch(setTheme());
+  };
+
+  const handleLogout = () => {
+    dispatch(logout()); 
+    navigate("/"); 
   };
   return (
     <div className={`fixed top-0 z-20 w-full ${useTheme ? "bg-gray-700" : "bg-white"}`}>
@@ -23,6 +31,11 @@ const Navbar = () => {
           >
             {useTheme === true ? "🌙 Dark" : "☀️ Light"}
           </li>
+           {isLoggedIn ? (
+            <li className="cursor-pointer" onClick={handleLogout}>Logout</li> 
+          ) : (
+            <Link to="/login"><li className="cursor-pointer">Login</li></Link>
+          )}
         </ul>
       </header>
     </div>

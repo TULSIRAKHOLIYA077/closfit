@@ -6,6 +6,7 @@ import CartPage from "./CartPage"
 import AddProductPage from "./AddProductPage"
 import AdminProduct from "./AdminProduct"
 import { useSelector } from "react-redux"
+import LoginPage from "./LoginPage"
 
 const EcommerceApp = () => {
   const useTheme = useSelector((store)=> store.theme.theme);
@@ -20,6 +21,7 @@ const EcommerceApp = () => {
           <Route path="admin/add" element={<AddProductPage/>} />
           <Route path="/admin/edit/:id" element={<AddProductPage />} />
           <Route path="/admin/product" element={<AdminProduct/>} />
+          <Route path="/login" element={<LoginPage/>} />
         </Route>      
       </Routes>
     </div>
