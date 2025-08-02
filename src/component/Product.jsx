@@ -6,7 +6,7 @@ const Product = ({ thumbnail, name, price, dec, id }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 w-full max-w-xs p-5 flex flex-col items-center text-gray-800">
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-xs p-5 flex flex-col items-center text-gray-800">
       <img src={thumbnail} alt={name} className="w-full h-38 object-contain rounded-xl mb-4" />
 
       <div className="w-full flex flex-col gap-2">

@@ -5,10 +5,13 @@ import ProductDetailPage from "./ProductDetailPage"
 import CartPage from "./CartPage" 
 import AddProductPage from "./AddProductPage"
 import AdminProduct from "./AdminProduct"
+import { useSelector } from "react-redux"
 
 const EcommerceApp = () => {
+  const useTheme = useSelector((store)=> store.theme.theme);
+
   return (
-    <div className="bg-gray-400">
+    <div className={`${useTheme ? "bg-gray-400" : "bg-white"}`}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} /> 

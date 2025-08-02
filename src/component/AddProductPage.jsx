@@ -8,6 +8,7 @@ const AddProductPage = () => {
   const navigate = useNavigate();
   const { id } = useParams(); 
   const isEditMode = Boolean(id);
+  const useTheme = useSelector((store)=> store.theme.theme);
 
   const { productItems } = useSelector((state) => state.product);
 
@@ -61,7 +62,7 @@ const AddProductPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 pt-40 px-4">
+    <div className={`min-h-screen ${useTheme ? "bg-gray-400" : "bg-white"}  pt-40 px-4`}>
       <div className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6">
           {isEditMode ? "Edit Product" : "Add Product"}

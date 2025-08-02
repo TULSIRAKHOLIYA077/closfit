@@ -8,6 +8,7 @@ const HomePage = () => {
   const productItems = useSelector((state) => state.product.productItems);
   const isApiLoaded = useSelector((state) => state.product.isApiLoaded);
   const [apiError, setApiError] = useState(null);
+  const useTheme = useSelector((store)=> store.theme.theme);
 
   useEffect(() => {
     const hasOnlyCustomProducts = productItems.every((item) =>
@@ -49,7 +50,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="bg-gray-400 relative z-10 pt-40 min-h-screen max-h-fit">
+    <div className={` ${useTheme ? "bg-gray-400" : "bg-white"} relative z-10 pt-40 min-h-screen max-h-fit`}>
       <ProductList productList={productItems} />
     </div>
   );

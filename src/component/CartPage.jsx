@@ -5,9 +5,10 @@ import { removeItem } from "../redux/cartSlice";
 const CartPage = () => {
   const cartItems = useSelector(state => state.cart.cartItems);
   const dispatch = useDispatch();
+  const useTheme = useSelector((store)=> store.theme.theme);
 
   return (
-    <div className="pt-32 min-h-screen px-6 bg-gradient-to-b from-gray-100 to-gray-300">
+    <div className={`pt-32 min-h-screen px-6 ${useTheme ? "bg-gray-400" : "bg-white"} `}>
       <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">🛒 Your Shopping Cart</h2>
 
       {cartItems.length === 0 ? (
@@ -17,7 +18,7 @@ const CartPage = () => {
           {cartItems.map((item, index) => (
             <div
               key={index}
-              className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 w-full max-w-xs p-5"
+              className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-xs p-5"
             >
               <button
                 className="absolute top-3 right-3 text-red-600 hover:text-red-800"

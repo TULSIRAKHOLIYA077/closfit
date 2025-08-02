@@ -6,6 +6,7 @@ const ProductDetailPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const productItems = useSelector((state) => state.product.productItems);
+  const useTheme = useSelector((store)=> store.theme.theme);
 
   const product = productItems.find((p) => p.id.toString() === id.toString());
 
@@ -30,7 +31,7 @@ dispatch(
   };
 
   return (
-    <div className="min-h-screen max-h-fit pt-30 bg-gray-100 px-6">
+    <div className={`min-h-screen max-h-fit pt-30 ${useTheme ? "bg-gray-400" : "bg-white"} px-6`}>
       <div className="bg-white w-full max-w-2xl rounded-xl flex flex-col p-6 items-center mx-auto shadow-lg">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <img
